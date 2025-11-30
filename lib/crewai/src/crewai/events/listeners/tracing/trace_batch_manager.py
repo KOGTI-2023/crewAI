@@ -12,7 +12,10 @@ from crewai.cli.authentication.token import AuthError, get_auth_token
 from crewai.cli.plus_api import PlusAPI
 from crewai.cli.version import get_crewai_version
 from crewai.events.listeners.tracing.types import TraceEvent
-from crewai.events.listeners.tracing.utils import should_auto_collect_first_time_traces
+from crewai.events.listeners.tracing.utils import (
+    is_tracing_enabled_in_context,
+    should_auto_collect_first_time_traces,
+)
 from crewai.utilities.constants import CREWAI_BASE_URL
 
 
@@ -73,7 +76,7 @@ class TraceBatchManager:
         use_ephemeral: bool = False,
     ) -> TraceBatch:
         """Initialize a new trace batch (thread-safe)"""
-        with self._init_lock:
+        with self._batch_ready_cv:
             if self.current_batch is not None:
                 logger.debug(
                     "Batch already initialized, skipping duplicate initialization"
@@ -96,7 +99,6 @@ class TraceBatchManager:
                 self.backend_initialized = True
 
             self._batch_ready_cv.notify_all()
-
             return self.current_batch
 
     def _initialize_backend_batch(
@@ -104,8 +106,11 @@ class TraceBatchManager:
         user_context: dict[str, str],
         execution_metadata: dict[str, Any],
         use_ephemeral: bool = False,
-    ):
+    ) -> None:
         """Send batch initialization to backend"""
+
+        if not is_tracing_enabled_in_context():
+            return
 
         if not self.plus_api or not self.current_batch:
             return
@@ -198,7 +203,7 @@ class TraceBatchManager:
                     return False
         return True
 
-    def add_event(self, trace_event: TraceEvent):
+    def add_event(self, trace_event: TraceEvent) -> None:
         """Add event to buffer"""
         self.event_buffer.append(trace_event)
 
@@ -243,7 +248,8 @@ class TraceBatchManager:
 
     def finalize_batch(self) -> TraceBatch | None:
         """Finalize batch and return it for sending"""
-        if not self.current_batch:
+
+        if not self.current_batch or not is_tracing_enabled_in_context():
             return None
 
         all_handlers_completed = self.wait_for_pending_events()
@@ -293,7 +299,7 @@ class TraceBatchManager:
 
         return finalized_batch
 
-    def _finalize_backend_batch(self, events_count: int = 0):
+    def _finalize_backend_batch(self, events_count: int = 0) -> None:
         """Send batch finalization to backend
 
         Args:
@@ -359,7 +365,7 @@ class TraceBatchManager:
             logger.error(f"❌ Error finalizing trace batch: {e}")
             self.plus_api.mark_trace_batch_as_failed(self.trace_batch_id, str(e))
 
-    def _cleanup_batch_data(self):
+    def _cleanup_batch_data(self) -> None:
         """Clean up batch data after successful finalization to free memory"""
         try:
             if hasattr(self, "event_buffer") and self.event_buffer:
@@ -404,7 +410,7 @@ class TraceBatchManager:
                 lambda: self.current_batch is not None, timeout=timeout
             )
 
-    def record_start_time(self, key: str):
+    def record_start_time(self, key: str) -> None:
         """Record start time for duration calculation"""
         self.execution_start_times[key] = datetime.now(timezone.utc)
 
