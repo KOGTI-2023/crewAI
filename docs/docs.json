@@ -131,6 +131,7 @@
                   "en/concepts/production-architecture",
                   "en/concepts/knowledge",
                   "en/concepts/llms",
+                  "en/concepts/files",
                   "en/concepts/processes",
                   "en/concepts/collaboration",
                   "en/concepts/training",
@@ -291,6 +292,7 @@
                   "en/observability/arize-phoenix",
                   "en/observability/braintrust",
                   "en/observability/datadog",
+                  "en/observability/galileo",
                   "en/observability/langdb",
                   "en/observability/langfuse",
                   "en/observability/langtrace",
@@ -428,7 +430,8 @@
                 "group": "How-To Guides",
                 "pages": [
                   "en/enterprise/guides/build-crew",
-                  "en/enterprise/guides/deploy-crew",
+                  "en/enterprise/guides/prepare-for-deployment",
+                  "en/enterprise/guides/deploy-to-amp",
                   "en/enterprise/guides/kickoff-crew",
                   "en/enterprise/guides/update-crew",
                   "en/enterprise/guides/enable-crew-studio",
@@ -595,6 +598,7 @@
                   "pt-BR/concepts/production-architecture",
                   "pt-BR/concepts/knowledge",
                   "pt-BR/concepts/llms",
+                  "pt-BR/concepts/files",
                   "pt-BR/concepts/processes",
                   "pt-BR/concepts/collaboration",
                   "pt-BR/concepts/training",
@@ -742,6 +746,7 @@
                   "pt-BR/observability/arize-phoenix",
                   "pt-BR/observability/braintrust",
                   "pt-BR/observability/datadog",
+                  "pt-BR/observability/galileo",
                   "pt-BR/observability/langdb",
                   "pt-BR/observability/langfuse",
                   "pt-BR/observability/langtrace",
@@ -862,7 +867,8 @@
                 "group": "Guias",
                 "pages": [
                   "pt-BR/enterprise/guides/build-crew",
-                  "pt-BR/enterprise/guides/deploy-crew",
+                  "pt-BR/enterprise/guides/prepare-for-deployment",
+                  "pt-BR/enterprise/guides/deploy-to-amp",
                   "pt-BR/enterprise/guides/kickoff-crew",
                   "pt-BR/enterprise/guides/update-crew",
                   "pt-BR/enterprise/guides/enable-crew-studio",
@@ -1044,6 +1050,7 @@
                   "ko/concepts/production-architecture",
                   "ko/concepts/knowledge",
                   "ko/concepts/llms",
+                  "ko/concepts/files",
                   "ko/concepts/processes",
                   "ko/concepts/collaboration",
                   "ko/concepts/training",
@@ -1203,6 +1210,7 @@
                   "ko/observability/arize-phoenix",
                   "ko/observability/braintrust",
                   "ko/observability/datadog",
+                  "ko/observability/galileo",
                   "ko/observability/langdb",
                   "ko/observability/langfuse",
                   "ko/observability/langtrace",
@@ -1323,7 +1331,8 @@
                 "group": "How-To Guides",
                 "pages": [
                   "ko/enterprise/guides/build-crew",
-                  "ko/enterprise/guides/deploy-crew",
+                  "ko/enterprise/guides/prepare-for-deployment",
+                  "ko/enterprise/guides/deploy-to-amp",
                   "ko/enterprise/guides/kickoff-crew",
                   "ko/enterprise/guides/update-crew",
                   "ko/enterprise/guides/enable-crew-studio",
@@ -1510,6 +1519,18 @@
     {
       "source": "/enterprise/:path*",
       "destination": "/en/enterprise/:path*"
+    },
+    {
+      "source": "/en/enterprise/guides/deploy-crew",
+      "destination": "/en/enterprise/guides/deploy-to-amp"
+    },
+    {
+      "source": "/ko/enterprise/guides/deploy-crew",
+      "destination": "/ko/enterprise/guides/deploy-to-amp"
+    },
+    {
+      "source": "/pt-BR/enterprise/guides/deploy-crew",
+      "destination": "/pt-BR/enterprise/guides/deploy-to-amp"
     },
     {
       "source": "/api-reference/:path*",
